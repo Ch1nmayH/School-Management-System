@@ -77,6 +77,7 @@ const updateStudent = async (req, res, next) => {
     if (!studentExist) {
       return res.status(400).json({ message: "Student Not Found." });
     }
+
     const studentUpaded = await Student.findByIdAndUpdate(
       _id,
 
@@ -105,6 +106,13 @@ const deleteStudent = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
+    const Existingtoken = req.cookies.token;
+    if (Existingtoken) {
+      const decodedData = jwt.verify(Existingtoken, process.env.JWT_SECRET);
+      if (decodedData) {
+        return res.status(200).json({ message: "You are already Logged in" });
+      }
+    }
     const _id = req.body._id;
     const student = await Student.findById(_id);
     if (!student) {
@@ -112,7 +120,7 @@ const login = async (req, res, next) => {
     }
 
     const token = jwt.sign(
-      { email: student.email, id: student._id },
+      { email: student.email, _id: student._id },
       process.env.JWT_SECRET
     );
 

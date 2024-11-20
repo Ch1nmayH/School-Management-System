@@ -57,20 +57,23 @@ The **School Management System** is a RESTful API built for managing schools eff
 ## API Endpoints
 
 ### Admin API
+```
 - **GET /**: Returns a welcome message for the Admin API.
 - **POST /addAdmin**: Add a new admin (requires admin authentication).
 - **POST /login**: Admin login with email and password.
 - **POST /logout**: Admin logout.
-
+```
 ### Class API
+```
 - **GET /**: Returns a welcome message for the Class API.
 - **POST /addClass**: Create a new class with a default dummy teacher assigned.
 - **PUT /assignTeacher**: Assign a teacher to a class (requires admin authentication).
 - **GET /getClass**: Fetch class details (requires admin authentication).
 - **PUT /update**: Update class details (requires admin authentication).
 - **DELETE /delete**: Delete a class (requires admin authentication).
-
+```
 ### Student API
+```
 - **GET /**: Returns a welcome message for the Student API.
 - **POST /login**: Student login using their ID and password.
 - **POST /logout**: Student logout.
@@ -79,8 +82,9 @@ The **School Management System** is a RESTful API built for managing schools eff
 - **PUT /update**: Update student details (requires student authentication).
 - **DELETE /delete**: Delete a student (requires teacher authentication).
 - **POST /uploadAvatar**: Upload a student’s profile picture (requires student authentication).
-
+```
 ### Teacher API
+```
 - **GET /**: Returns a welcome message for the Teacher API.
 - **POST /login**: Teacher login using their ID and password.
 - **POST /logout**: Teacher logout.
@@ -89,18 +93,20 @@ The **School Management System** is a RESTful API built for managing schools eff
 - **PUT /update**: Update teacher details (requires teacher authentication).
 - **DELETE /delete**: Delete a teacher (requires admin authentication).
 - **POST /uploadAvatar**: Upload a teacher’s profile picture (requires teacher authentication).
-
+```
 
 
 ### Authentication and Authorization
-
+```
 - **Middleware**:
     - **checkAdminAuth**: Verifies admin access.
     - **checkTeacherAuth**: Verifies teacher access.
     - **checkStudentAuth**: Verifies student access.
     - **Role-based Access**: Ensures only authorized users can perform specific actions.
-
+```
 ### Additional Notes
+```
 - **All sensitive data is hashed and stored securely using bcrypt**.
 - **Cloudinary is used for seamless avatar management**.
 - **The system ensures robust role-based authentication and proper handling of resources**.
+```

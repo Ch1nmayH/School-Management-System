@@ -14,9 +14,11 @@ const addStudent = async (req,res,next) =>{
         if(checkGrade){
             classId = checkGrade._id;
             const newStudent = await Student.create({name,email,classId});
+            let getSudentCount = await Class.findOne({_id: classId});
+            getSudentCount = getSudentCount.studentCount + 1;
             if(newStudent){
                 const updateClassCount = await Class.findByIdAndUpdate({_id:classId}, {
-                    studentCount: studentCount+1,
+                    studentCount: getSudentCount,
                 })
             }
             res.status(200).json({message : "New Student Successfully added to the class."})

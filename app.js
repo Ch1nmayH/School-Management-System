@@ -2,6 +2,7 @@ import express from "express"
 import "dotenv/config";
 
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 import studentRouter from "./routes/studentRoute.js"
 import teacherRouter from "./routes/teacherRoute.js"
@@ -10,7 +11,7 @@ import classRouter from "./routes/classRoute.js"
 import dbConnection from "./config/dbConnection.js"
 
 const app = express();
-
+app.use(cookieParser());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 

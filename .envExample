@@ -1,2 +1,7 @@
 PORT = 8000
 MONGODB_URI = "mongodb://localhost:27017/schoolManagement"
+JWT_SECRET = "BANANA"
+DEFAULT_AVATAR_URL = "https://res.cloudinary.com/djm9s9hhn/image/upload/v1732099818/default_avatar_ev1o0z.jpg"
+CLOUDINARY_NAME = ""
+CLOUDINARY_API = ""
+CLOUDINARY_SECRET = ""

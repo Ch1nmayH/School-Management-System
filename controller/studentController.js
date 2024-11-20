@@ -69,6 +69,18 @@ const getStudent = async (req, res, next) => {
 const updateStudent = async (req, res, next) => {
   try {
     const { _id, ...updates } = req.body;
+    const token = req.cookies.token;
+
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decodedData) {
+      const stu = await Student.findById(_id);
+      if (stu) {
+        if (stu._id != decodedData._id) {
+          res.status(400).json({ message: `You are not authorized.` });
+        }
+      }
+    }
     if (!_id) {
       return res.status(400).json({ message: "Student ID (_id) is required" });
     }
@@ -155,8 +167,27 @@ const logout = async (req, res, next) => {
 
 const uploadAvatar = async (req, res, next) => {
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
+    const userId = req.body.userId;
+    const token = req.cookies.token;
 
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (decodedData) {
+      const stu = await Student.findById(userId);
+      if (stu) {
+        if (stu._id != decodedData._id) {
+          res.status(400).json({ message: `You are not authorized.` });
+        }
+      }
+    }
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      public_id: `student_management_system/avatars/${userId}`,
+      overwrite: true,
+    });
+
+    const updateAvatar = await Student.findByIdAndUpdate(userId, {
+      profileImageUrl : result.secure_url
+    })
     res.status(200).json({
       message: "Profile Picture has been successfully uploaded.",
       url: result.secure_url, // Cloudinary's URL for the image

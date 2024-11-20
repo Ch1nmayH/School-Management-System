@@ -1,6 +1,6 @@
 import mongoose, { mongo } from "mongoose";
 import isEmail from 'validator/lib/isEmail.js';
-
+import bcrypt from "bcrypt"
 
 const adminSchema = mongoose.Schema({
   name: { type: String, required: [true, "Please Enter a name."] },
@@ -22,4 +22,19 @@ const adminSchema = mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+
+adminSchema.pre("save", async function (next) {
+  try {
+    let salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+
+    return next();
+  } catch (error) {
+    console.log(error);
+    throw Error("Unable to create the user");
+    next();
+  }
+});
+
 export default mongoose.model("Admin", adminSchema);
+

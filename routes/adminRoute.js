@@ -1,5 +1,6 @@
 import { Router } from "express";
 import adminController from "../controller/adminController.js";
+import studentMiddleware from "../middlewares/studentMiddleware.js";
 
 const router = Router();
 
@@ -14,6 +15,6 @@ router.post(
   );
 
 router.post("/login", adminController.login)
-router.get("/logout", adminController.logout)
+router.post("/logout", adminController.logout)
 
 export default router;

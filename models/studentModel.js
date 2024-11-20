@@ -11,7 +11,7 @@ const studentSchema = new mongoose.Schema({
         validate : [isEmail, "Please Enter a Valid Email."]
     },
     classId : {type : mongoose.Schema.Types.ObjectId, ref: 'Class', required: [true, "Class ID is Missing, Please Enter a Class Reference ID to Proceed."]},
-    profileImageUrl : {type : String, default : "./uploads/defaultAvatar.jpg"},
+    profileImageUrl : {type : String, default : `${process.env.DEFAULT_AVATAR_URL}`},
     createdAt : {type : Date, default: Date.now}
 
 });

@@ -10,6 +10,10 @@ const adminSchema = mongoose.Schema({
     unique: [true, "Email Already Taken, Please Enter a Unique Email."],
     validate: [isEmail, "Please Enter a Valid Email."],
   },
+  password : {type: String, 
+    required : [true, "Please Enter a password to continue."],
+    minlength: 6,
+  },
   isAdmin : {type : Boolean, default:true},
   profileImageUrl: {
     type: String,

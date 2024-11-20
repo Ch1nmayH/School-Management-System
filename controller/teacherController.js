@@ -107,9 +107,94 @@ const login = async (req, res, next) => {
     }
   };
 
+  const updateTeacher = async (req, res, next) => {
+    try {
+      const { _id, ...updates } = req.body;
+      const token = req.cookies.token;
+  
+      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+  
+      if (decodedData) {
+        const tea = await Teacher.findById(_id);
+        if (tea) {
+          if (tea._id != decodedData._id) {
+            res.status(400).json({ message: `You are not authorized.` });
+          }
+        }
+      }
+      if (!_id) {
+        return res.status(400).json({ message: "Teacher ID (_id) is required" });
+      }
+  
+      const teacherExist = await Teacher.findById(_id);
+      if (!teacherExist) {
+        return res.status(400).json({ message: "Teacher Not Found." });
+      }
+      const teacherUpdated = await Teacher.findByIdAndUpdate(
+        _id,
+  
+        { $set: updates },
+        { new: true, runValidators: true }
+      );
+  
+      res.status(200).json({
+        message: "Teacher successfully updated",
+        teacher: teacherUpdated,
+      });
+    } catch (error) {
+      res.status(400).json({ message: `${error.message}` });
+    }
+  };
+  
+  const deleteTeacher = async (req, res, next) => {
+    try {
+      const _id = req.body._id;
+      const teacher = await Teacher.findOneAndDelete(_id);
+      res.status(200).json({ message: "Teacher Has been Successfully Deleted." });
+    } catch (error) {
+      res.status(400).json({ message: `${error.message}` });
+    }
+  };
+
+  const uploadAvatar = async (req, res, next) => {
+    try {
+      const userId = req.body.userId;
+      const token = req.cookies.token;
+  
+      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+  
+      if (decodedData) {
+        const tea = await Teacher.findById(userId);
+        if (tea) {
+          if (tea._id != decodedData._id) {
+            res.status(400).json({ message: `You are not authorized.` });
+          }
+        }
+      }
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        public_id: `student_management_system/avatars/${userId}`,
+        overwrite: true,
+      });
+  
+      const updateAvatar = await Teacher.findByIdAndUpdate(userId, {
+        profileImageUrl : result.secure_url
+      })
+      res.status(200).json({
+        message: "Profile Picture has been successfully uploaded.",
+        url: result.secure_url, // Cloudinary's URL for the image
+      });
+    } catch (error) {
+      res.status(400).json({ message: `${error.message}` });
+    }
+  };
+
+  
 export default {
     addTeacher,
     getTeacher,
+    updateTeacher,
+    deleteTeacher,
+    uploadAvatar,
     login,
     logout
 }

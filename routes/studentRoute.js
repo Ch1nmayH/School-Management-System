@@ -9,7 +9,6 @@ router.get("/", (req,res)=>{
     res.send("Student API");
 })
 
-
 router.post("/login", studentController.login)
 router.post("/logout", studentController.logout)
 
